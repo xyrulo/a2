@@ -1,0 +1,17 @@
+To-do
+
+Input implementation
+
+Registers - A,X,L,PC,SW,B,S,T,F
+Instruction format implementation
+Addressing mode implementation
+
+Assembler directives
+Basic: START, END, BYTE, WORD, RESB, RESW
+Literals, EQU, ORG, Expressions
+Program blocks
+
+Instruction set implementation
+
+Opcode generation
+Opcode output formatting
