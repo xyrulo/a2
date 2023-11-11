@@ -48,7 +48,7 @@ void create_mnemonics(){
 }
 
 /* Generating OPCODE symbol */
-void generate_optab() {
+void generate_opcode() {
 
 }
 
@@ -125,7 +125,7 @@ void generate_symtab() {
 
         if (label != "" && opr == "EQU") {
             if (operand == "*")
-                symtab.insert(make_pair(label, intermediate[i]));
+                SYMTAB.insert(make_pair(label, intermediate[i]));
             else {
                 string a = "", b = "";
                 int flag = 0;
@@ -136,18 +136,18 @@ void generate_symtab() {
                     if (flag == 0) a += operand[i];
                     else b += operand[i];
                 }
-                symtab.insert(make_pair(label, int_to_hex(hex_to_int(symtab[a])-hex_to_int(symtab[b]))));
+                SYMTAB.insert(make_pair(label, int_to_hex(hex_to_int(SYMTAB[a])-hex_to_int(SYMTAB[b]))));
             }
         }
         else if (label != "") {
-            symtab.insert(make_pair(label, intermediate[i]));
+            SYMTAB.insert(make_pair(label, intermediate[i]));
         }
     }
 }
 
 /* First pass of assembler */
 void pass1() {
-    // need to nenerate optab and symtab
+    // need to nenerate optab and SYMTAB
     // todo: generate_optab();
     // todo: assign addresses to labels
 	generate_symtab();
@@ -176,6 +176,8 @@ int main(int argc, char *argv[]) {
     create_mnemonics();
     pass1();
     pass2();
+
+    return 0;
 
 }
 /*Can you see this*/
