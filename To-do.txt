@@ -15,3 +15,15 @@ Instruction set implementation
 
 Opcode generation
 Opcode output formatting
+
+Input file through command line
+Pass 1
+- Assign addresses to all source code statements
+- Save addresses assigned to labels for use in pass 2
+- Process directives
+Pass 2
+- Translate instructions
+- Convert labels to addresses
+- Generate values defined by BYTE/WORD
+- Process any other directives
+- Write obj code to output
