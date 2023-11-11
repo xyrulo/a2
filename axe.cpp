@@ -15,6 +15,7 @@ vector<string> code;
 map<string, string> REG;
 unordered_map<string, string> mnemonics;
 map<string, string> SYMTAB;
+map<int, string> intermediate;
 int LOCCTR = 0, pc = 0, base = 0, index = 0;
 
 void create_mnemonics(){
