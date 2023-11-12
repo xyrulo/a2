@@ -16,7 +16,7 @@ map<string, string> REG;
 unordered_map<string, string> mnemonics;
 map<string, string> SYMTAB;
 map<int, string> intermediate;
-int LOCCTR = 0, pc = 0, base = 0, index = 0;
+int LOCCTR = 0, progLength, start = 0, pc = 0, base = 0, index = 0;
 
 void create_mnemonics(){
     mnemonics[(string)"ADD"] = (string)"18";
@@ -148,14 +148,46 @@ void generate_symtab() {
 /* First pass of assembler */
 void pass1() {
     // Assign addresses to all source code statements
+
+    if get_opcode(firstline) = "START" {
+        LOCCTR, start = get_operand(firstline);
+    }
+    // todo: Update currentLine
     // Assign addresses to labels
-	generate_symtab();
-    // Process directives
+    while (get_operator(currentLine) != "END") {
+        // Check if current line is assembler directive
+        // Check for symbol in LABEL field, insert into SYMTAB if not already there
+        if (get_operator is a LABEL) {
+            	generate_symtab();
+        }
+        // WORD/RESW/RESB/BYTE LOCCTR changes
+        if (get_operator is in OPTAB) {
+            LOCCTR += 3;
+        } else if (get_operator == "WORD") {
+            LOCCTR += 3;
+        } else if (get_operator == "RESW") {
+            LOCCTR = LOCCTR + (3 * get_operand);
+        } else if (get_operator == "RESB") {
+            LOCCTR += (get_operand);
+        } else if (get_operator == "BYTE") {
+            LOCCTR += (get_operand length);
+        } else {
+            cout << "Error";
+        }
+        intermediate.insert(LOCCTR, get_operand);
+        // todo: Update currentLine
+    }
+    progLength = LOCCTR;
+    // todo: Process directives
 }
 
 /* Second pass of assembler */
 void pass2() {
-
+    // todo: Update currentLine to firstLine
+    if (get_operator(currentLine) == "START") {
+        // todo: write line to output file
+        
+    }
 }
 
 int main(int argc, char *argv[]) {
