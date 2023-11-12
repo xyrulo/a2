@@ -186,12 +186,33 @@ void pass2() {
     // todo: Update currentLine to firstLine
     if (get_operator(currentLine) == "START") {
         // todo: write line to output file
-        
+        // todo: Update currentLine
     }
+    while (get_operator(currentLine) != "END") {
+        if (currentLine opcode is in optab) {
+            // Check if symbol
+            if (get_operand(currentLine) == symbol) {
+                if (SYMTAB contains get_operand(currentLine)) {
+                    // todo: store symbol value as operand address
+                } else {
+                    // todo: store 0 as operand address, set error flag
+                } 
+            } else {
+                // todo: create objcode generation method
+                generate_objcode();
+            }
+        } else {
+            if (opcode == "BYTE" || "WORD") {
+                // todo: convert constant to objcode
+            }
+        }
+        // todo: write line to output file
+    }
+    // todo: write end line to output file
 }
 
 int main(int argc, char *argv[]) {
-    // Get cmd line args
+    // todo: Get cmd line args
     fstream inputFile;
     string line, filePath;
     string argv1 = argv[1];
@@ -203,6 +224,7 @@ int main(int argc, char *argv[]) {
        	return 1;
     }
 
+    // todo: create output file
     inputFile.open(filePath.c_str());
 
     create_mnemonics();
@@ -212,4 +234,3 @@ int main(int argc, char *argv[]) {
     return 0;
 
 }
-/*Can you see this*/
