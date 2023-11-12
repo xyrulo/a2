@@ -147,10 +147,10 @@ void generate_symtab() {
 
 /* First pass of assembler */
 void pass1() {
-    // need to nenerate optab and SYMTAB
-    // todo: generate_optab();
-    // todo: assign addresses to labels
+    // Assign addresses to all source code statements
+    // Assign addresses to labels
 	generate_symtab();
+    // Process directives
 }
 
 /* Second pass of assembler */
