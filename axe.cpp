@@ -151,32 +151,6 @@ int checkPCRel(int num){
         return 0;
 }
 
-// Generating objcode
-void generate_objcode() {
-    bool nixbpe[6] = {0, 0, 0, 0, 0, 0};
-    for(int i = 1; i < code.size(); i++){
-        string label = get_label(code[i]);
-        string opr = get_operator(code[i]);
-        string operand = get_operand(code[i]);
-    // Determine format
-        nixbpe[0] = (operand[0] == '@');
-        nixbpe[1] = (operand[0] == '#');
-        if (operand[0] == '+') {
-            //Format 4
-            //Not sure about nixbpe[2]
-            nixbpe[2] = (operand[operand.length() - 1] == 'X' && operand[operand.length() - 2] == ',') ? 1 : 0;
-            nixbpe[3] = 0;
-            nixbpe[4] = 0;
-            nixbpe[5] = 1;
-        } else if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
-            //Format 2
-            
-        } else {
-            //Format 3
-        }
-
-}
-
 /* Generating Symbol Table */
 void generate_symtab() {
     for(int i = 0; i < code.size(); i++){
@@ -245,12 +219,45 @@ void assign_location() {
     
 }
 
+// Generating objcode
+void generate_objcode() {
+    bool nixbpe[6] = {0, 0, 0, 0, 0, 0};
+    for(int i = 1; i < code.size(); i++){
+        string label = get_label(code[i]);
+        string opr = get_operator(code[i]);
+        string operand = get_operand(code[i]);
+        
+    // Determine format
+        if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
+            // todo: Format 2
+        } else { // Format 3/4
+            nixbpe[0] = (operand[0] == '@');
+            nixbpe[1] = (operand[0] == '#');
+            // Check for indexed
+            nixbpe[2] = (operand[operand.length() - 1] == 'X' && operand[operand.length() - 2] == ',') ? 1 : 0;
+            nixbpe[3] = 0;
+            nixbpe[4] = 0;
+            // todo: add opr hex to nixbpe, convert to hex
+            hex_to_int(mnemonics[opr]);
+            // Make format 3/4 adjustments
+            if (operand[0] == '+') {
+                //Format 4
+                nixbpe[5] = 1;
+                // todo: calculate TA, append to previous
+            } else {
+                //Format 3
+                // todo: calculate TA, append to previous
+            }
+        }
+}
+
 /* First pass of assembler */
 void pass1() {
     // need to generate optab and symtab
     // todo: generate_optab();
     assign_location();
     generate_symtab();
+    // Process assembler directives
 }
 
 /* Second pass of assembler */
@@ -270,7 +277,6 @@ void pass2() {
                     // todo: store 0 as operand address, set error flag
                 } 
             } else {
-                // todo: create objcode generation method
                 generate_objcode();
             }
         } else {

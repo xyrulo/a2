@@ -31,10 +31,12 @@ SYMTAB files will use the same name as the source files with '.st' filename exte
    - **`get_label()`, `get_operator()`, `get_operand()`:** Extracts label, operator, and operand from a line of code.
    - **`int_to_hex()`, `hex_to_int()`:** Converts integers to hexadecimal strings and vice versa.
    - **`generate_symtab()`:** Generates the symbol table during the first pass. Handles EQU directives and assigns addresses to labels.
+   - **`generate_objcode()`:** Generates object code in second pass.
 
 6. **Pass Functions (`pass1()` and `pass2()`):**
    - **`pass1()`:** Invokes functions to generate the opcode table and symbol table. Assigns addresses to labels.
    - **`pass2()`:** Yet to be implemented. It would handle the second pass of the assembler.
 
 7. **Main Function (`main()`):**
+   - Handles input file(s) and creates appropriate output files.
    - Calls `create_mnemonics()`, `pass1()`, and `pass2()` in sequence.
