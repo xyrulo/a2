@@ -15,9 +15,6 @@ Need to figure out first: How are we storing the address and object code? Can we
 - generate_symbtab()
     - LITTAB too?
 - pass1()
-    - create iteration method to go through each line
-    - swap pseudocode with appropriate methods and variables
-    - ensure addresses are properly calculated
     - **Process assembler directives**
 - pass2()
     - swap pseudocode with appropriate methods and variables
