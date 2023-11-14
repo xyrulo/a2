@@ -57,11 +57,6 @@ void create_directives() {
 			assembler_dirc.insert(assembler_dir[i]);
 	}
 
-// Generating objcode
-string generate_objcode(int loc, string instr) {
-
-}
-
 string get_label(string line) {
     string label = "";
     for(int i = 0; i < line.size(); i++) {
@@ -135,6 +130,46 @@ int string_to_int(string s) {
 		return ans;
 }
 
+int checkBased(string str){
+    if(str.substr(str.length() - 2 , str.length()) == ",X" || str.substr(str.length() - 2 , str.length()) == ",x")
+        return 1;
+    else
+        return 0;
+}
+
+int checkPCRel(int num){
+    if (num >= -2048 && num <= 2047)
+        return 1;
+    else
+        return 0;
+}
+
+// Generating objcode
+void generate_objcode() {
+    bool nixbpe[6] = {0, 0, 0, 0, 0, 0};
+    for(int i = 1; i < code.size(); i++){
+        string label = get_label(code[i]);
+        string opr = get_operator(code[i]);
+        string operand = get_operand(code[i]);
+    // Determine format
+        nixbpe[0] = (operand[0] == '@');
+        nixbpe[1] = (operand[0] == '#');
+        if (operand[0] == '+') {
+            //Format 4
+            //Not sure about nixbpe[2]
+            nixbpe[2] = (operand[operand.length() - 1] == 'X' && operand[operand.length() - 2] == ',') ? 1 : 0;
+            nixbpe[3] = 0;
+            nixbpe[4] = 0;
+            nixbpe[5] = 1;
+        } else if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
+            //Format 2
+            
+        } else {
+            //Format 3
+        }
+
+}
+
 /* Generating Symbol Table */
 void generate_symtab() {
     for(int i = 0; i < code.size(); i++){
@@ -185,9 +220,9 @@ void assign_location() {
             else if(previous_operator=="RESB")
                 location_ctr+=string_to_int(get_operand(code[i-1]));
         }
-        else if(code[i-1][10] == '+')
+        else if (code[i-1][10] == '+')
             location_ctr += 4;
-        else if(previous_operator == "COMPR" || previous_operator == "CLEAR" || previous_operator == "TIXR")
+        else if (previous_operator == "COMPR" || previous_operator == "CLEAR" || previous_operator == "TIXR")
             location_ctr += 2;
         else
             location_ctr += 3;

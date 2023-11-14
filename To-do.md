@@ -7,7 +7,6 @@ Need to figure out first: How are we storing the address and object code? Can we
 - write SYMTAB
 
 **Core work**
-- Add more instructions to mnemonics
 - Add assembly directives list 
 - generate_objcode()
     - separate by format
@@ -22,7 +21,6 @@ Need to figure out first: How are we storing the address and object code? Can we
 - main()
     - combine intermediate and SYMTAB for full listing contents (if necessary)
     - replace pseudocode as necessary
-- Make file
 
 **Testing**
 - Test formatting
