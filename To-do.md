@@ -35,5 +35,5 @@ Need to figure out first: How are we storing the address and object code? Can we
 
 **Finishing touches**
 - Clean up variables at the top
-- Appropriate comments
+- Appropriate comments and documentation
 - test on edoras
