@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <map>
 #include <fstream>
-#include <bits/stdc++.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -213,24 +212,55 @@ void pass2() {
 
 int main(int argc, char *argv[]) {
     // todo: Get cmd line args
-    fstream inputFile;
-    string line, filePath;
-    string argv1 = argv[1];
-
-    if (argc == 2) { // Command line arguments
-       	filePath = argv[1];
+    string inputFile;
+    vector<string> fileNames;
+    if (argc >= 2) { // Command line arguments
+       	for (int i = 0; i < argc; i++) {
+            string fileName = argv[i];
+            // Check if arg is a .sic file
+            if(fileName.substr(fileName.find_last_of(".") + 1) == "sic") {
+                int pos = fileName.find(".");
+                fileNames.push_back(fileName.substr(0, pos));
+            } else {
+                 cout << "Invalid File " << argv[i] << std::endl;
+                 exit(2);
+            }
+        }
     } else {
        	cout << "Invalid syntax.\n";
        	return 1;
     }
 
-    // todo: create output file
-    inputFile.open(filePath.c_str());
-
+    // Create mnemonics
     create_mnemonics();
-    pass1();
-    pass2();
+    
+    for (string fileName : fileNames) {
+        // Open input file
+        ifstream inputFile;
+        string filePath = fileName.append(".sic");
+        inputFile.open(filePath);
 
+        // Create output file
+        ofstream outputFile;
+        outputFile.open(fileName.append(".l"),ios::out);
+
+        // Populate code vector with lines from input
+        string line = "";
+        while (getline(inputFile, line)) {
+            code.push_back(line);
+        }
+
+        pass1();
+        pass2();
+
+        // Close files, clear code vector for next file
+        inputFile.close();
+        outputFile.close();
+        code.clear();
+    }
+
+    // todo: create output file
+    
     return 0;
 
 }
