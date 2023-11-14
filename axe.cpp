@@ -240,9 +240,11 @@ int main(int argc, char *argv[]) {
         string filePath = fileName.append(".sic");
         inputFile.open(filePath);
 
-        // Create output file
-        ofstream outputFile;
-        outputFile.open(fileName.append(".l"),ios::out);
+        // Create output files
+        ofstream outputListing;
+        outputListing.open(fileName.append(".l"),ios::out);
+        ofstream outputSymtab;
+        outputSymtab.open(fileName.append(".st"),ios::out);
 
         // Populate code vector with lines from input
         string line = "";
@@ -255,7 +257,8 @@ int main(int argc, char *argv[]) {
 
         // Close files, clear code vector for next file
         inputFile.close();
-        outputFile.close();
+        outputListing.close();
+        outputSymtab.close();
         code.clear();
     }
 
