@@ -9,12 +9,14 @@
 using namespace std;
 
 string progName;
-vector<pair<int, string>> objcode;
 vector<string> code;
 map<string, string> REG;
 unordered_map<string, string> mnemonics;
+vector<string> format2 = {"ADDR", "CLEAR", "COMPR", "TIXR"};
 map<string, string> SYMTAB;
+map<string, string> OPTAB;
 map<int, string> intermediate;
+map<string, string> listing;
 int LOCCTR = 0, progLength, start = 0, pc = 0, base = 0, index = 0;
 
 void create_mnemonics(){
@@ -46,8 +48,8 @@ void create_mnemonics(){
     mnemonics[(string)"T"] = (string)"5";
 }
 
-/* Generating OPCODE symbol */
-void generate_opcode() {
+// Generating objcode
+string generate_objcode(int loc, string instr) {
 
 }
 
@@ -160,7 +162,7 @@ void pass1() {
             	generate_symtab();
         }
         // WORD/RESW/RESB/BYTE LOCCTR changes
-        if (get_operator is in OPTAB) {
+        if (get_operator is in mnemonics) { // check format as well
             LOCCTR += 3;
         } else if (get_operator == "WORD") {
             LOCCTR += 3;
@@ -184,7 +186,7 @@ void pass1() {
 void pass2() {
     // todo: Update currentLine to firstLine
     if (get_operator(currentLine) == "START") {
-        // todo: write line to output file
+        // todo: write line to intermediate
         // todo: Update currentLine
     }
     while (get_operator(currentLine) != "END") {
@@ -205,9 +207,9 @@ void pass2() {
                 // todo: convert constant to objcode
             }
         }
-        // todo: write line to output file
+        // todo: write line to intermediate
     }
-    // todo: write end line to output file
+    // todo: write end line to intermediate
 }
 
 int main(int argc, char *argv[]) {
@@ -240,29 +242,43 @@ int main(int argc, char *argv[]) {
         string filePath = fileName.append(".sic");
         inputFile.open(filePath);
 
-        // Create output files
-        ofstream outputListing;
-        outputListing.open(fileName.append(".l"),ios::out);
-        ofstream outputSymtab;
-        outputSymtab.open(fileName.append(".st"),ios::out);
-
         // Populate code vector with lines from input
         string line = "";
         while (getline(inputFile, line)) {
             code.push_back(line);
         }
+        inputFile.close();
 
         pass1();
         pass2();
 
-        // Close files, clear code vector for next file
-        inputFile.close();
+        // Create listing file
+        ofstream outputListing;
+        outputListing.open(fileName.append(".l"),ios::out););
+        // To do: combine intermediate with SYMTAB
+        // Sort according to addresses, so we have each instruction addressed and translated
+        for (string line : code) {
+            outputListing << intermediate.(address) << line << intermediate.(objcode);
+        }
         outputListing.close();
+
+        // Create SYMTAB file
+        ofstream outputSymtab;
+        outputSymtab.open(fileName.append(".st"),ios::out);
+        map<string, string>::iterator it = SYMTAB.begin(); 
+        outputListing << "Symbol  Value   Flags:" << endl << "-----------------------" << endl;
+        for (auto i : SYMTAB) {
+            outputListing << i.first << "\t" << i.second << "\t" <</* flags here <<*/ endl; 
+        }
+
+        cout << "Name    Literal   Address:" << endl << "-----------------------" << endl;
+        for (auto i : LITTAB) {
+            outputListing << i.first << "\t" << i.second << "\t" <</* address here <<*/ endl; 
+        }
         outputSymtab.close();
+        
         code.clear();
     }
-
-    // todo: create output file
     
     return 0;
 
