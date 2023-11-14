@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <set>
 
 using namespace std;
 
@@ -17,6 +18,8 @@ map<string, string> SYMTAB;
 map<string, string> OPTAB;
 map<int, string> intermediate;
 map<string, string> listing;
+string assembler_dir[] = {"BASE","BYTE","WORD","RESW","RESB","EQU"};
+set<string> assembler_dirc; 
 int LOCCTR = 0, progLength, start = 0, pc = 0, base = 0, index = 0;
 
 void create_mnemonics(){
@@ -47,6 +50,12 @@ void create_mnemonics(){
     mnemonics[(string)"S"] = (string)"2";
     mnemonics[(string)"T"] = (string)"5";
 }
+
+/* Create directives */
+void create_directives() {
+		for(int i = 0; i < 6; i++)
+			assembler_dirc.insert(assembler_dir[i]);
+	}
 
 // Generating objcode
 string generate_objcode(int loc, string instr) {
@@ -117,6 +126,15 @@ int hex_to_int(string hex) {
     return a;
 }
 
+int string_to_int(string s) {
+    int ans = 0;
+		for(int i = 0;i < s.size(); i++){
+			ans *= 10;
+			ans += s[i]-'0';
+		}
+		return ans;
+}
+
 /* Generating Symbol Table */
 void generate_symtab() {
     for(int i = 0; i < code.size(); i++){
@@ -146,40 +164,51 @@ void generate_symtab() {
     }
 }
 
+void assign_location() {
+    int ctr = 0;
+    int location_ctr = string_to_int(get_operand(code[0]));
+    string loc = int_to_hex(location_ctr);
+    intermediate.insert(make_pair(ctr,loc));
+    intermediate.insert(make_pair(++ctr,loc));
+    for(int i = 2; i < code.size(); i++){
+        string current_operator = get_operator(code[i]);
+        string previous_operator = get_operator(code[i-1]);
+        if(assembler_dirc.find(previous_operator) != assembler_dirc.end()) {
+            if(previous_operator == "RESW")
+                location_ctr += 3;
+            else if(previous_operator == "BYTE"){
+                if(code[i-1][20] == 'C')
+                    location_ctr += 3;
+                else if(code[i-1][20] == 'X')
+                    location_ctr++;
+            }
+            else if(previous_operator=="RESB")
+                location_ctr+=string_to_int(get_operand(code[i-1]));
+        }
+        else if(code[i-1][10] == '+')
+            location_ctr += 4;
+        else if(previous_operator == "COMPR" || previous_operator == "CLEAR" || previous_operator == "TIXR")
+            location_ctr += 2;
+        else
+            location_ctr += 3;
+
+        if(current_operator=="BASE"){
+            loc = "____";
+        }
+        else{
+            loc = int_to_hex(location_ctr);
+        }
+        intermediate.insert(make_pair(i,loc));
+    }
+    
+}
+
 /* First pass of assembler */
 void pass1() {
-    // Assign addresses to all source code statements
-
-    if get_opcode(firstline) = "START" {
-        LOCCTR, start = get_operand(firstline);
-    }
-    // todo: Update currentLine
-    // Assign addresses to labels
-    while (get_operator(currentLine) != "END") {
-        // Check if current line is assembler directive
-        // Check for symbol in LABEL field, insert into SYMTAB if not already there
-        if (get_operator is a LABEL) {
-            	generate_symtab();
-        }
-        // WORD/RESW/RESB/BYTE LOCCTR changes
-        if (get_operator is in mnemonics) { // check format as well
-            LOCCTR += 3;
-        } else if (get_operator == "WORD") {
-            LOCCTR += 3;
-        } else if (get_operator == "RESW") {
-            LOCCTR = LOCCTR + (3 * get_operand);
-        } else if (get_operator == "RESB") {
-            LOCCTR += (get_operand);
-        } else if (get_operator == "BYTE") {
-            LOCCTR += (get_operand length);
-        } else {
-            cout << "Error";
-        }
-        intermediate.insert(LOCCTR, get_operand);
-        // todo: Update currentLine
-    }
-    progLength = LOCCTR;
-    // todo: Process directives
+    // need to generate optab and symtab
+    // todo: generate_optab();
+    assign_location();
+    generate_symtab();
 }
 
 /* Second pass of assembler */
@@ -271,6 +300,7 @@ int main(int argc, char *argv[]) {
             outputListing << i.first << "\t" << i.second << "\t" <</* flags here <<*/ endl; 
         }
 
+        // Add LITTAB
         cout << "Name    Literal   Address:" << endl << "-----------------------" << endl;
         for (auto i : LITTAB) {
             outputListing << i.first << "\t" << i.second << "\t" <</* address here <<*/ endl; 
