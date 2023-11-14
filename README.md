@@ -1,4 +1,4 @@
-README
+**Info**
 
 Written by Jonah Hedlund (823867220), Maximilian Nock, (824823292), Fusheng Jia ()l, CS 530, Fall 2023
 
