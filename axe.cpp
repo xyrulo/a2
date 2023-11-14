@@ -310,7 +310,7 @@ int main(int argc, char *argv[]) {
        	return 1;
     }
 
-    // Create mnemonics
+    // Create mnemonics OpCode Table
     create_mnemonics();
     
     for (string fileName : fileNames) {
