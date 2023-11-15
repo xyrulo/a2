@@ -14,6 +14,7 @@ string progName;
 vector<string> code;
 map<string, string> REG;
 unordered_map<string, string> mnemonics;
+vector<string> format1 = {};
 vector<string> format2 = {"ADDR", "CLEAR", "COMPR", "TIXR"};
 map<string, string> SYMTAB;
 map<string, string> OPTAB;
@@ -271,7 +272,7 @@ void generate_objcode() {
 /* First pass of assembler */
 void pass1() {
     assign_location();
-    generate_symtab();
+    generate_symtab(); // make sure absolute/relative is included
 }
 
 /* Second pass of assembler */
