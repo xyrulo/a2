@@ -1,10 +1,10 @@
 **Info**
 
-Written by Jonah Hedlund (823867220), Maximilian Nock, (824823292), Fusheng Jia ()l, CS 530, Fall 2023
+Written by Jonah Hedlund (823867220), Maximilian Nock, (824823292), Fusheng Jia (822109555), CS 530, Fall 2023
 
 Assigment 2, Two Pass Assembler for SIC/XE machine
 
-Files: axe.cpp, MakeFile, README, sdd, test files
+Files: axe.cpp, MakeFile, README, SDD, test files
 
 Made to be compiled by G++.
 
