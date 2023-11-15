@@ -7,6 +7,7 @@
 #include <vector>
 #include <unordered_map>
 #include <set>
+#include <bitset>
 
 using namespace std;
 
@@ -14,11 +15,12 @@ string progName;
 vector<string> code;
 map<string, string> REG;
 unordered_map<string, string> mnemonics;
+vector<string> format1 = {};
 vector<string> format2 = {"ADDR", "CLEAR", "COMPR", "TIXR"};
 map<string, string> SYMTAB;
 map<string, string> OPTAB;
 map<int, string> intermediate;
-map<string, string> listing;
+map<int, string> listing;
 string assembler_dir[] = {"BASE","BYTE","WORD","RESW","RESB","EQU"};
 set<string> assembler_dirc; 
 int LOCCTR = 0, progLength, start = 0, pc = 0, base = 0, index = 0;
@@ -139,7 +141,7 @@ int string_to_int(string s) {
 		return ans;
 }
 
-int checkBased(string str){
+int checkIndexed(string str){
     if(str.substr(str.length() - 2 , str.length()) == ",X" || str.substr(str.length() - 2 , str.length()) == ",x")
         return 1;
     else
@@ -224,12 +226,14 @@ void assign_location() {
 // Generating objcode
 void generate_objcode() {
     bool nixbpe[6] = {0, 0, 0, 0, 0, 0};
-    for(int i = 1; i < code.size(); i++){
+    for(int 0 = 1; i < code.size(); i++){
         string label = get_label(code[i]);
         string opr = get_operator(code[i]);
         string operand = get_operand(code[i]);
-        
-    // Determine format
+        string address = intermediate[i];
+        // Determine format
+        // Todo: skip necessary assembler directives
+        // Check for format 1 instructions
         if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
             // todo: Format 2
             
@@ -241,22 +245,27 @@ void generate_objcode() {
             nixbpe[3] = 0;
             nixbpe[4] = 0;
             // todo: add opr hex to nixbpe, convert to hex
-            hex_to_int(mnemonics[opr]);
             // Make format 3/4 adjustments
             if (operand[0] == '+') {
-                //Format 4
+                //Format 4: just use direct
                 nixbpe[5] = 1;
+                // Convert operand to bitset, to add nixbpe
+                // Maybe use bitmasking 
+                bitset<4> bs(opr);
                 if (nixbpe[1] && !nixbpe[0]) {
-                    // todo: append TA to previous
+                    // todo: append disp to previous
                 } else {
-                    // todo: calculate TA
+                    // todo: calculate disp
                 }
             } else {
                 //Format 3
+                // Default PC relative, unless otherwise specified or needed
+                // Convert operand to bitset, to add nixbpe
+                bitset<4> bs(opr);
                 if (nixbpe[1] && !nixbpe[0]) {
-                    // todo: append TA to previous
+                    // todo: append disp to previous
                 } else {
-                    // todo: calculate TA
+                    // todo: calculate disp
                 }
             }
         }
@@ -264,20 +273,16 @@ void generate_objcode() {
 
 /* First pass of assembler */
 void pass1() {
-    // need to generate optab and symtab
-    // todo: generate_optab();
     assign_location();
-    generate_symtab();
-    // Process assembler directives
+    generate_symtab(); // make sure absolute/relative is included
 }
 /*include bit masking*/
 /* Second pass of assembler */
 void pass2() {
-    // todo: Update currentLine to firstLine
+    string currentLine = code[0];
     if (get_operator(currentLine) == "START") {
         // todo: write line to intermediate
-        intermediate.insert(get_operator(label));
-        // todo: Update currentLine
+        currentLine = code[1];
     }
     while (get_operator(currentLine) != "END") {
         if (currentLine opcode is in optab) {
@@ -344,10 +349,9 @@ int main(int argc, char *argv[]) {
         // Create listing file
         ofstream outputListing;
         outputListing.open(fileName.append(".l"),ios::out););
-        // To do: combine intermediate with SYMTAB
-        // Sort according to addresses, so we have each instruction addressed and translated
-        for (string line : code) {
-            outputListing << intermediate.(address) << line << intermediate.(objcode);
+        // Write addresses and obj code from intermediate
+        for (int i = 0; i < code.size; i++) {
+            outputListing << intermediate[i] << "\t" << code[i] << "\t" << listing[i];
         }
         outputListing.close();
 
