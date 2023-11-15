@@ -230,6 +230,7 @@ void generate_objcode() {
     // Determine format
         if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
             // todo: Format 2
+
         } else { // Format 3/4
             nixbpe[0] = (operand[0] == '@');
             nixbpe[1] = (operand[0] == '#');
@@ -265,6 +266,7 @@ void pass2() {
     // todo: Update currentLine to firstLine
     if (get_operator(currentLine) == "START") {
         // todo: write line to intermediate
+        intermediate.insert(get_operator(label));
         // todo: Update currentLine
     }
     while (get_operator(currentLine) != "END") {
