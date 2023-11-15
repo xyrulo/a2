@@ -22,7 +22,7 @@ string assembler_dir[] = {"BASE","BYTE","WORD","RESW","RESB","EQU"};
 set<string> assembler_dirc; 
 int LOCCTR = 0, progLength, start = 0, pc = 0, base = 0, index = 0;
 
-void create_mnemonics(){
+void create_mnemonics() {
     mnemonics[(string)"ADD"] = (string)"18";
     mnemonics[(string)"ADDR"] = (string)"58";
     mnemonics[(string)"AND"] = (string)"40";
@@ -112,6 +112,7 @@ string int_to_hex(int a) {
         }
         a /= 16;
     }
+    return hex;
 }
 
 int hex_to_int(string hex) {
@@ -244,10 +245,18 @@ void generate_objcode() {
             if (operand[0] == '+') {
                 //Format 4
                 nixbpe[5] = 1;
-                // todo: calculate TA, append to previous
+                if (nixbpe[1] && !nixbpe[0]) {
+                    // todo: append TA to previous
+                } else {
+                    // todo: calculate TA
+                }
             } else {
                 //Format 3
-                // todo: calculate TA, append to previous
+                if (nixbpe[1] && !nixbpe[0]) {
+                    // todo: append TA to previous
+                } else {
+                    // todo: calculate TA
+                }
             }
         }
 }
