@@ -248,26 +248,10 @@ void generate_objcode() {
         // Determine format
         // Todo: skip necessary assembler directives
         // Check for format 1 instructions
-        if(opr == "FIX" || "FLOAT" || "HIO" || "NORM" || "SIO" || "TIO"){
-            intermediate[i];
-        }
-    
-        // todo: Format 2: Needs to run through all Format 2 operators
-        if(opr == "ADDR" || "CLEAR" || "COMPR" || "DIVR" || "MULR" || "RMO" || "SHIFTL" || "SHIFTR" || "SUBR" || "SVC" || "TIXR"){
-        string s, r1 = "A", r2 = "X", result; 
-        int j; 
-        s = intermediate[i];
-        for (j = 0; j < s.size() && s[j] != ','; j++) 
-            r1 = s.substr(0, j);
-        if (j < s.size()) 
-            r2 = s.substr(j + 1, s.size() - j - 1);
-        result = OPTAB[intermediate[i]];
-        result += REG[r1];
-        result += REG[r2];
-        result; 
-        
-            }
-             else { // Format 3/4
+        if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
+            // todo: Format 2
+            
+        } else { // Format 3/4
             // e = 0 Format 3, e = 1 format 4
             nixbpe[0] = (operand[0] == '@');
             nixbpe[1] = (operand[0] == '#');
@@ -293,7 +277,7 @@ void generate_objcode() {
                 // Default PC relative, unless otherwise specified or needed
                 // PC relative is after, * is before
                 // Convert operand to bitset, to add nixbpe
-                bitset<12> bs1(opr);
+                bitset<4> bs(opr);
                 //immediate addressing
                 if (nixbpe[0] && !nixbpe[1]) {
                     nixbpe[0] = 1;
@@ -325,11 +309,11 @@ void pass2() {
         // todo: write line to intermediate
         currentLine = code[1];
     }
-    while (get_operator(currentLine) != "END") {
+    /* while (get_operator(currentLine) != "END") {
         if (1) { //currentLine opr is in optab
             // Check if symbol
-            if (get_label(currentLine) != " ") {
-                if (1) { // SYMTAB contains get_operand(currentLine)
+            if (get_operand(currentLine) == get_label(currentLine)) {
+                if (1) { //SYMTAB contains get_operand(currentLine)
                     // todo: store symbol value as operand address
                 } else {
                     // todo: store 0 as operand address, set error flag
@@ -343,7 +327,7 @@ void pass2() {
             }
         }
         // todo: write line to intermediate
-    }
+    } */
     // todo: write end line to intermediate
 }
 
@@ -419,7 +403,5 @@ int main(int argc, char *argv[]) {
         
         code.clear();
     }
-    
     return 0;
-
 }

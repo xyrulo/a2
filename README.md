@@ -9,9 +9,7 @@ Files:
 - **MakeFile**: Used to make axe from axe.cpp
 - **SDD**: Document showcase the group's plan of action and any changes during the course of development
 - **test files**: Files that axe was tested on, including
-   - s.lis
    - s.sic
-   - s.sym
 - **README:** This file.
 
 
@@ -52,3 +50,5 @@ To use, simply call the make file, then input `axe` followed by the .sic files y
 7. **Main Function (`main()`):**
    - Handles input file(s) and creates appropriate output files.
    - Calls `create_mnemonics()`, `pass1()`, and `pass2()` in sequence.
+
+   There was a lot we were unable to finish. Those concerns have been address in the SDD, towards the bottom, stating what happened and what we have learned from this experience.
