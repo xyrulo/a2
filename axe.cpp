@@ -3,6 +3,7 @@
 #include <map>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -308,7 +309,7 @@ void pass2() {
         // todo: write line to intermediate
         currentLine = code[1];
     }
-    /* while (get_operator(currentLine) != "END") {
+    while (get_operator(currentLine) != "END") {
         if (currentLine opr is in optab) {
             // Check if symbol
             if (get_operand(currentLine) == symbol) {
@@ -326,7 +327,7 @@ void pass2() {
             }
         }
         // todo: write line to intermediate
-    } */
+    }
     // todo: write end line to intermediate
 }
 
@@ -357,6 +358,8 @@ int main(int argc, char *argv[]) {
         // Open input file
         ifstream inputFile;
         string filePath = fileName;
+        string listingFile = fileName;
+        string symtabFile = fileName;
         filePath.append(".sic");
         inputFile.open(filePath);
 
@@ -372,20 +375,21 @@ int main(int argc, char *argv[]) {
 
         // Create listing file
         ofstream outputListing;
-        outputListing.open(fileName.append(".l"),ios::out);
+        outputListing.open(listingFile.append(".l"),ios::out);
         // Write addresses and obj code from intermediate
         for (int i = 0; i < code.size(); i++) {
-            outputListing << intermediate[i] << "\t" << code[i] << "\t" << listing[i];
+            outputListing << setw(4) << setfill('0') << intermediate[i];
+            outputListing << "\t" << code[i] << "\t" << listing[i] << endl;
         }
         outputListing.close();
 
         // Create SYMTAB file
         ofstream outputSymtab;
-        outputSymtab.open(fileName.append(".st"),ios::out);
+        outputSymtab.open(symtabFile.append(".st"),ios::out);
         map<string, string>::iterator it = SYMTAB.begin(); 
-        outputListing << "Symbol  Value   Flags:" << endl << "-----------------------" << endl;
+        outputListing << "Symbol  Value   Flags:\n-----------------------" << endl;
         for (auto i : SYMTAB) {
-            outputListing << i.first << "\t" << i.second << "\t" <</* flags here <<*/ endl; 
+            outputListing << i.first << "\t" << i.second << "\t" <</* flags here <<*/endl; 
         }
 
         // Add LITTAB

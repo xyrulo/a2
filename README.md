@@ -9,9 +9,9 @@ Files:
 - **MakeFile**: Used to make axe from axe.cpp
 - **SDD**: Document showcase the group's plan of action and any changes during the course of development
 - **test files**: Files that axe was tested on, including
-   - P2sample.lis
-   - P2sample.sic
-   - P2sample.sym
+   - s.lis
+   - s.sic
+   - s.sym
 - **README:** This file.
 
 
