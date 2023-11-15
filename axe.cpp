@@ -1,3 +1,4 @@
+/*Jonah Hedlund cssc  , Maximilian Nock cssc2602, Fusheng Jia cssc */
 #include <stdio.h>
 #include <map>
 #include <fstream>
@@ -235,7 +236,9 @@ void generate_objcode() {
         // Check for format 1 instructions
         if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
             // todo: Format 2
+            
         } else { // Format 3/4
+            // e = 0 Format 3, e = 1 format 4
             nixbpe[0] = (operand[0] == '@');
             nixbpe[1] = (operand[0] == '#');
             // Check for indexed
@@ -261,8 +264,16 @@ void generate_objcode() {
                 // PC relative is after, * is before
                 // Convert operand to bitset, to add nixbpe
                 bitset<4> bs(opr);
+                //immediate addressing
+                if (nixbpe[0] && !nixpbe[1]){
+                nixbpe[0] = 1 
+                }
+                //indirect addressing
                 if (nixbpe[1] && !nixbpe[0]) {
                     // todo: append disp to previous
+                nixbpe[6] = (operand[operand.length() - 1] == 'E' && operand[operand.length() - 2] == ',') ? 1 : 0;
+                //TA = (B) + disp
+                //TA = (PC) + disp
                 } else {
                     // todo: calculate disp
                 }
@@ -276,7 +287,7 @@ void pass1() {
     assign_location();
     generate_symtab(); // make sure absolute/relative is included
 }
-
+/*include bit masking*/
 /* Second pass of assembler */
 void pass2() {
     string currentLine = code[0];
