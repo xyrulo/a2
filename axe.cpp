@@ -1,3 +1,4 @@
+/*Jonah Hedlund cssc  , Maximilian Nock cssc2602, Fusheng Jia cssc */
 #include <stdio.h>
 #include <map>
 #include <fstream>
@@ -231,7 +232,7 @@ void generate_objcode() {
     // Determine format
         if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
             // todo: Format 2
-
+            
         } else { // Format 3/4
             nixbpe[0] = (operand[0] == '@');
             nixbpe[1] = (operand[0] == '#');
@@ -269,7 +270,7 @@ void pass1() {
     generate_symtab();
     // Process assembler directives
 }
-
+/*include bit masking*/
 /* Second pass of assembler */
 void pass2() {
     // todo: Update currentLine to firstLine
