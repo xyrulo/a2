@@ -256,12 +256,12 @@ void generate_objcode() {
         if(opr == "ADDR" || "CLEAR" || "COMPR" || "DIVR" || "MULR" || "RMO" || "SHIFTL" || "SHIFTR" || "SUBR" || "SVC" || "TIXR"){
         string s, r1 = "A", r2 = "X", result; 
         int j; 
-        s = intermediate[i].second[2];
+        s = intermediate[i];
         for (j = 0; j < s.size() && s[j] != ','; j++) 
             r1 = s.substr(0, j);
         if (j < s.size()) 
             r2 = s.substr(j + 1, s.size() - j - 1);
-        result = OPTAB[intermediate[i].second[1].second];
+        result = OPTAB[intermediate[i]];
         result += REG[r1];
         result += REG[r2];
         result; 
