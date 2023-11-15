@@ -248,7 +248,7 @@ void generate_objcode() {
         // Determine format
         // Todo: skip necessary assembler directives
         // Check for format 1 instructions
-        if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
+        if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") { //add other mnemonics
             // todo: Format 2
             
         } else { // Format 3/4
@@ -277,7 +277,8 @@ void generate_objcode() {
                 // Default PC relative, unless otherwise specified or needed
                 // PC relative is after, * is before
                 // Convert operand to bitset, to add nixbpe
-                bitset<4> bs(opr);
+                bitset<12> bs1(opr);
+                bs1.
                 //immediate addressing
                 if (nixbpe[0] && !nixbpe[1]) {
                     nixbpe[0] = 1;
