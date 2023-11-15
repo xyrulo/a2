@@ -1,4 +1,4 @@
-/*Jonah Hedlund cssc  , Maximilian Nock cssc2602, Fusheng Jia cssc */
+/*Jonah Hedlund cssc2621, Maximilian Nock cssc2602, Fusheng Jia cssc */
 #include <stdio.h>
 #include <map>
 #include <fstream>
@@ -15,8 +15,8 @@ string progName;
 vector<string> code;
 map<string, string> REG;
 unordered_map<string, string> mnemonics;
-vector<string> format1 = {};
-vector<string> format2 = {"ADDR", "CLEAR", "COMPR", "TIXR"};
+vector<string> format1 = {"FIX", "FLOAT", "HIO", "NORM", "TIO"};
+vector<string> format2 = {"ADDR", "CLEAR", "COMPR", "DIVR", "MULR", "RMO", "SHIFTL", "SHIFTR", "SUBR", "SVC", "TIXR"};
 map<string, string> SYMTAB;
 map<string, string> OPTAB;
 map<int, string> intermediate;
@@ -32,6 +32,10 @@ void create_mnemonics() {
     mnemonics[(string)"CLEAR"] = (string)"B4";
     mnemonics[(string)"COMP"] = (string)"28";
     mnemonics[(string)"COMPR"] = (string)"A0";
+    mnemonics[(string)"DIVR"] = (string)"9C";
+    mnemonics[(string)"FIX"] = (string)"C4";
+    mnemonics[(string)"FLOAT"] = (string)"C0";
+    mnemonics[(string)"HIO"] = (string)"F4";
     mnemonics[(string)"J"] = (string)"3C";
     mnemonics[(string)"JEQ"] = (string)"30";
     mnemonics[(string)"JGT"] = (string)"34";
@@ -40,19 +44,28 @@ void create_mnemonics() {
     mnemonics[(string)"LDA"] = (string)"00";
     mnemonics[(string)"LDB"] = (string)"68";
     mnemonics[(string)"LDCH"] = (string)"50";
-    mnemonics[(string)"LDL"] = (string)"8";
+    mnemonics[(string)"LDL"] = (string)"08";
     mnemonics[(string)"LDT"] = (string)"74";
     mnemonics[(string)"MUL"] = (string)"20";
+    mnemonics[(string)"MULR"] = (string)"98";
+    mnemonics[(string)"NORM"] = (string)"C8";
     mnemonics[(string)"OR"] = (string)"44";
     mnemonics[(string)"RD"] = (string)"D8";
     mnemonics[(string)"RSUB"] = (string)"4C";
+    mnemonics[(string)"RMO"] = (string)"AC";
+    mnemonics[(string)"SHIFTL"] = (string)"A4";
+    mnemonics[(string)"SHIFTR"] = (string)"A8";
+    mnemonics[(string)"SIO"] = (string)"F0";
     mnemonics[(string)"STA"] = (string)"0C";
     mnemonics[(string)"STCH"] = (string)"54";
     mnemonics[(string)"STL"] = (string)"14";
     mnemonics[(string)"STSW"] = (string)"E8";
     mnemonics[(string)"STX"] = (string)"10";
     mnemonics[(string)"SUB"] = (string)"1C";
+    mnemonics[(string)"SUBR"] = (string)"94";
+    mnemonics[(string)"SVC"] = (string)"B0";
     mnemonics[(string)"TD"] = (string)"E0";
+    mnemonics[(string)"TIO"] = (string)"F8";
     mnemonics[(string)"TIXR"] = (string)"B8";
     mnemonics[(string)"WD"] = (string)"DC";
     mnemonics[(string)"A"] = (string)"0";
@@ -265,13 +278,13 @@ void generate_objcode() {
                 // Convert operand to bitset, to add nixbpe
                 bitset<4> bs(opr);
                 //immediate addressing
-                if (nixbpe[0] && !nixpbe[1]){
-                nixbpe[0] = 1 
+                if (nixbpe[0] && !nixbpe[1]) {
+                    nixbpe[0] = 1;
                 }
                 //indirect addressing
                 if (nixbpe[1] && !nixbpe[0]) {
                     // todo: append disp to previous
-                nixbpe[6] = (operand[operand.length() - 1] == 'E' && operand[operand.length() - 2] == ',') ? 1 : 0;
+                nixbpe[5] = (operand[operand.length() - 1] == 'E' && operand[operand.length() - 2] == ',') ? 1 : 0;
                 //TA = (B) + disp
                 //TA = (PC) + disp
                 } else {
