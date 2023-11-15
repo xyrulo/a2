@@ -12,7 +12,7 @@ Files:
    - s.sic
 - **README:** This file.
 
-Made to be compiled by G++. Turned in on cssc2621
+Made to be compiled by G++. Turned in on cssc2621 
 
 We have created a two pass assembler that will open the source files, if unable it will throw and error. "axe" reads each source file, scans the files, and processes each assembler directive using the two pass assembler logic. The program then reads the file for each instruction. Then the program will generate a listing file and SYMTAB according to SIC/XE standards.
 
