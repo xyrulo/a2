@@ -231,8 +231,9 @@ void generate_objcode() {
         string address = intermediate[i];
         // Determine format
         // Todo: skip necessary assembler directives
+        // Check for format 1 instructions
         if (opr == "ADDR" || "CLEAR" || "COMPR" || "TIXR") {
-            listing[i] = opr + operand;
+            // todo: Format 2
         } else { // Format 3/4
             nixbpe[0] = (operand[0] == '@');
             nixbpe[1] = (operand[0] == '#');
@@ -243,9 +244,10 @@ void generate_objcode() {
             // todo: add opr hex to nixbpe, convert to hex
             // Make format 3/4 adjustments
             if (operand[0] == '+') {
-                //Format 4
+                //Format 4: just use direct
                 nixbpe[5] = 1;
                 // Convert operand to bitset, to add nixbpe
+                // Maybe use bitmasking 
                 bitset<4> bs(opr);
                 if (nixbpe[1] && !nixbpe[0]) {
                     // todo: append disp to previous
@@ -254,6 +256,7 @@ void generate_objcode() {
                 }
             } else {
                 //Format 3
+                // Default PC relative, unless otherwise specified or needed
                 // Convert operand to bitset, to add nixbpe
                 bitset<4> bs(opr);
                 if (nixbpe[1] && !nixbpe[0]) {
@@ -321,7 +324,7 @@ int main(int argc, char *argv[]) {
        	return 1;
     }
 
-    // Create mnemonics
+    // Create mnemonics OpCode Table
     create_mnemonics();
     
     for (string fileName : fileNames) {
