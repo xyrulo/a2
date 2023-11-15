@@ -225,7 +225,7 @@ void assign_location() {
 // Generating objcode
 void generate_objcode() {
     bool nixbpe[6] = {0, 0, 0, 0, 0, 0};
-    for(int 0 = 1; i < code.size(); i++){
+    for(int i = 1; i < code.size(); i++){
         string label = get_label(code[i]);
         string opr = get_operator(code[i]);
         string operand = get_operand(code[i]);
@@ -258,6 +258,7 @@ void generate_objcode() {
             } else {
                 //Format 3
                 // Default PC relative, unless otherwise specified or needed
+                // PC relative is after, * is before
                 // Convert operand to bitset, to add nixbpe
                 bitset<4> bs(opr);
                 if (nixbpe[1] && !nixbpe[0]) {
@@ -267,9 +268,10 @@ void generate_objcode() {
                 }
             }
         }
+    }
 }
 
-/* First pass of assembler */
+// First pass of assembler
 void pass1() {
     assign_location();
     generate_symtab(); // make sure absolute/relative is included
@@ -282,8 +284,8 @@ void pass2() {
         // todo: write line to intermediate
         currentLine = code[1];
     }
-    while (get_operator(currentLine) != "END") {
-        if (currentLine opcode is in optab) {
+    /* while (get_operator(currentLine) != "END") {
+        if (currentLine opr is in optab) {
             // Check if symbol
             if (get_operand(currentLine) == symbol) {
                 if (SYMTAB contains get_operand(currentLine)) {
@@ -295,21 +297,20 @@ void pass2() {
                 generate_objcode();
             }
         } else {
-            if (opcode == "BYTE" || "WORD") {
+            if (get_operator(currentLine) == "BYTE" || "WORD") {
                 // todo: convert constant to objcode
             }
         }
         // todo: write line to intermediate
-    }
+    } */
     // todo: write end line to intermediate
 }
 
 int main(int argc, char *argv[]) {
-    // todo: Get cmd line args
     string inputFile;
     vector<string> fileNames;
     if (argc >= 2) { // Command line arguments
-       	for (int i = 0; i < argc; i++) {
+       	for (int i = 1; i < argc; i++) {
             string fileName = argv[i];
             // Check if arg is a .sic file
             if(fileName.substr(fileName.find_last_of(".") + 1) == "sic") {
@@ -331,7 +332,8 @@ int main(int argc, char *argv[]) {
     for (string fileName : fileNames) {
         // Open input file
         ifstream inputFile;
-        string filePath = fileName.append(".sic");
+        string filePath = fileName;
+        filePath.append(".sic");
         inputFile.open(filePath);
 
         // Populate code vector with lines from input
@@ -346,9 +348,9 @@ int main(int argc, char *argv[]) {
 
         // Create listing file
         ofstream outputListing;
-        outputListing.open(fileName.append(".l"),ios::out););
+        outputListing.open(fileName.append(".l"),ios::out);
         // Write addresses and obj code from intermediate
-        for (int i = 0; i < code.size; i++) {
+        for (int i = 0; i < code.size(); i++) {
             outputListing << intermediate[i] << "\t" << code[i] << "\t" << listing[i];
         }
         outputListing.close();
@@ -363,10 +365,12 @@ int main(int argc, char *argv[]) {
         }
 
         // Add LITTAB
+        /*
         cout << "Name    Literal   Address:" << endl << "-----------------------" << endl;
-        for (auto i : LITTAB) {
-            outputListing << i.first << "\t" << i.second << "\t" <</* address here <<*/ endl; 
-        }
+        for (auto i : LITTAB) { */
+        //    outputListing << i.first << "\t" << i.second << "\t" <</* address here <<*/ endl; 
+        //}
+        
         outputSymtab.close();
         
         code.clear();

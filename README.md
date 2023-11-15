@@ -4,7 +4,16 @@ Written by Jonah Hedlund (823867220), Maximilian Nock, (824823292), Fusheng Jia 
 
 Assigment 2, Two Pass Assembler for SIC/XE machine
 
-Files: axe.cpp, MakeFile, README, SDD, test files
+Files: 
+- **axe.cpp**: The main file, containing all of the mentioned functions.
+- **MakeFile**: Used to make axe from axe.cpp
+- **SDD**: Document showcase the group's plan of action and any changes during the course of development
+- **test files**: Files that axe was tested on, including
+   - P2sample.lis
+   - P2sample.sic
+   - P2sample.sym
+- **README:** This file.
+
 
 Made to be compiled by G++.
 
@@ -12,6 +21,8 @@ We have created a two pass assembler that will open the source files, if unable 
 
 Listing Files will be named the same as source files with '.l' filename extension
 SYMTAB files will use the same name as the source files with '.st' filename extension.
+
+To use, simply call the make file, then input `axe` followed by the .sic files you wish to assemble.
 
 **Variables and Functions**
 1. **Mnemonics Map (`mnemonics`):**
@@ -31,11 +42,12 @@ SYMTAB files will use the same name as the source files with '.st' filename exte
    - **`get_label()`, `get_operator()`, `get_operand()`:** Extracts label, operator, and operand from a line of code.
    - **`int_to_hex()`, `hex_to_int()`:** Converts integers to hexadecimal strings and vice versa.
    - **`generate_symtab()`:** Generates the symbol table during the first pass. Handles EQU directives and assigns addresses to labels.
+   - **`assign_addresses`
    - **`generate_objcode()`:** Generates object code in second pass.
 
 6. **Pass Functions (`pass1()` and `pass2()`):**
    - **`pass1()`:** Invokes functions to generate the opcode table and symbol table. Assigns addresses to labels.
-   - **`pass2()`:** Yet to be implemented. It would handle the second pass of the assembler.
+   - **`pass2()`:** Generates object code.
 
 7. **Main Function (`main()`):**
    - Handles input file(s) and creates appropriate output files.
