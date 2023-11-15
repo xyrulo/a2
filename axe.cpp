@@ -310,10 +310,10 @@ void pass2() {
         currentLine = code[1];
     }
     while (get_operator(currentLine) != "END") {
-        if (currentLine opr is in optab) {
+        if (1) { //currentLine opr is in optab
             // Check if symbol
-            if (get_operand(currentLine) == symbol) {
-                if (SYMTAB contains get_operand(currentLine)) {
+            if (get_label(currentLine) != " ") {
+                if (1) { // SYMTAB contains get_operand(currentLine)
                     // todo: store symbol value as operand address
                 } else {
                     // todo: store 0 as operand address, set error flag
